@@ -1148,6 +1148,10 @@ class tzinfo:
     """
     __slots__ = ()
 
+    def __new__(cls):
+        self = object.__new__(cls)
+        return self
+
     def tzname(self, dt):
         "datetime -> string name of time zone."
         raise NotImplementedError("tzinfo subclass must override tzname()")
