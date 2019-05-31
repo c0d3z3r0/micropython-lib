@@ -133,18 +133,18 @@ def basicConfig(level=INFO, filename=None, stream=None, format=None, style="%"):
 
 
 class Handler:
-    def __init__(self):
-        self.formatter = Formatter()
+    def __init__(self, formatter=None):
+        self.formatter = formatter or Formatter()
 
     def setFormatter(self, fmt):
         self.formatter = fmt
 
 
 class StreamHandler(Handler):
-    def __init__(self, stream=None):
+    def __init__(self, *args, stream=None, **kwargs):
+        super().__init__(*args, **kwargs)
         self._stream = stream or sys.stderr
         self.terminator = "\n"
-        self.formatter = Formatter()
 
     def emit(self, record):
         self._stream.write(self.formatter.format(record) + self.terminator)
@@ -154,8 +154,9 @@ class StreamHandler(Handler):
 
 
 class FileHandler(Handler):
-    def __init__(self, filename, mode="a", encoding=None, delay=False):
-        super().__init__()
+    def __init__(self, filename, *args, mode="a", encoding=None,
+                 delay=False, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.encoding = encoding
         self.mode = mode
