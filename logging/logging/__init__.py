@@ -40,40 +40,40 @@ class Logger:
     def isEnabledFor(self, level):
         return level >= (self.level or _level)
 
-    def log(self, level, msg, *args):
+    def log(self, level, msg, *args, module=None):
         if level >= (self.level or _level):
             record = LogRecord(
-                self.name, level, None, None, msg, args, None, None, None
+                self.name, level, None, None, msg, args, None, None, None, module=module
             )
 
             if self.handlers:
                 for hdlr in self.handlers:
                     hdlr.emit(record)
 
-    def debug(self, msg, *args):
-        self.log(DEBUG, msg, *args)
+    def debug(self, msg, *args, module=None):
+        self.log(DEBUG, msg, *args, module=None)
 
-    def info(self, msg, *args):
-        self.log(INFO, msg, *args)
+    def info(self, msg, *args, module=None):
+        self.log(INFO, msg, *args, module=None)
 
-    def warning(self, msg, *args):
-        self.log(WARNING, msg, *args)
+    def warning(self, msg, *args, module=None):
+        self.log(WARNING, msg, *args, module=None)
 
     warn = warning
 
-    def error(self, msg, *args):
-        self.log(ERROR, msg, *args)
+    def error(self, msg, *args, module=None):
+        self.log(ERROR, msg, *args, module=None)
 
-    def critical(self, msg, *args):
-        self.log(CRITICAL, msg, *args)
+    def critical(self, msg, *args, module=None):
+        self.log(CRITICAL, msg, *args, module=None)
 
-    def exc(self, e, msg, *args):
+    def exc(self, e, msg, *args, module=None):
         buf = uio.StringIO()
         sys.print_exception(e, buf)
-        self.log(ERROR, msg + "\n" + buf.getvalue(), *args)
+        self.log(ERROR, msg + "\n" + buf.getvalue(), *args, module=None)
 
-    def exception(self, msg, *args):
-        self.exc(sys.exc_info()[1], msg, *args)
+    def exception(self, msg, *args, module=None):
+        self.exc(sys.exc_info()[1], msg, *args, module=None)
 
     def addHandler(self, hdlr):
         if self.handlers is None:
@@ -100,11 +100,11 @@ def getLogger(name=None):
     _loggers[name] = l
     return l
 
-def info(msg, *args):
-    getLogger(None).info(msg, *args)
+def info(msg, *args, module=None):
+    getLogger(None).info(msg, *args, module=None)
 
-def debug(msg, *args):
-    getLogger(None).debug(msg, *args)
+def debug(msg, *args, module=None):
+    getLogger(None).debug(msg, *args, module=None)
 
 def warning(msg, *args):
     getLogger(None).warning(msg, *args)
@@ -241,7 +241,8 @@ root = getLogger()
 
 class LogRecord:
     def __init__(
-        self, name, level, pathname, lineno, msg, args, exc_info, func=None, sinfo=None
+        self, name, level, pathname, lineno, msg, args, exc_info, func=None,
+        sinfo=None, module=None
     ):
         ct = utime.time()
         self.created = ct
@@ -256,3 +257,4 @@ class LogRecord:
         self.exc_info = exc_info
         self.func = func
         self.sinfo = sinfo
+        self.module = module or '<?>'
