@@ -181,11 +181,10 @@ class FileHandler(Handler):
 
 class Formatter:
 
-    converter = utime.localtime
-
-    def __init__(self, fmt=None, datefmt=None, style="%"):
+    def __init__(self, fmt=None, datefmt=None, style="%", converter=None):
         self.fmt = fmt or "%(message)s"
         self.datefmt = datefmt
+        self.converter = converter or utime.localtime
 
         if style not in ("%", "{"):
             raise ValueError("Style must be one of: %, {")
@@ -227,7 +226,7 @@ class Formatter:
 
     def formatTime(self, record, datefmt=None):
         assert datefmt is None  # datefmt is not supported
-        ct = utime.localtime(record.created)
+        ct = self.converter(record.created)
         return "{0}-{1}-{2} {3}:{4}:{5}".format(*ct)
 
     def formatException(self, exc_info):
