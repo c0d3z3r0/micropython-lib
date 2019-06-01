@@ -51,29 +51,29 @@ class Logger:
                     hdlr.emit(record)
 
     def debug(self, msg, *args, module=None):
-        self.log(DEBUG, msg, *args, module=None)
+        self.log(DEBUG, msg, *args, module=module)
 
     def info(self, msg, *args, module=None):
-        self.log(INFO, msg, *args, module=None)
+        self.log(INFO, msg, *args, module=module)
 
     def warning(self, msg, *args, module=None):
-        self.log(WARNING, msg, *args, module=None)
+        self.log(WARNING, msg, *args, module=module)
 
     warn = warning
 
     def error(self, msg, *args, module=None):
-        self.log(ERROR, msg, *args, module=None)
+        self.log(ERROR, msg, *args, module=module)
 
     def critical(self, msg, *args, module=None):
-        self.log(CRITICAL, msg, *args, module=None)
+        self.log(CRITICAL, msg, *args, module=module)
 
     def exc(self, e, msg, *args, module=None):
         buf = uio.StringIO()
         sys.print_exception(e, buf)
-        self.log(ERROR, msg + "\n" + buf.getvalue(), *args, module=None)
+        self.log(ERROR, msg + "\n" + buf.getvalue(), *args, module=module)
 
     def exception(self, msg, *args, module=None):
-        self.exc(sys.exc_info()[1], msg, *args, module=None)
+        self.exc(sys.exc_info()[1], msg, *args, module=module)
 
     def addHandler(self, hdlr):
         if self.handlers is None:
@@ -101,10 +101,10 @@ def getLogger(name=None):
     return l
 
 def info(msg, *args, module=None):
-    getLogger(None).info(msg, *args, module=None)
+    getLogger(None).info(msg, *args, module=module)
 
 def debug(msg, *args, module=None):
-    getLogger(None).debug(msg, *args, module=None)
+    getLogger(None).debug(msg, *args, module=module)
 
 def warning(msg, *args):
     getLogger(None).warning(msg, *args)
