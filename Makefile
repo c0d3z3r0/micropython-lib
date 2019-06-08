@@ -9,7 +9,7 @@ install:
 	@if [ -n "$(MOD)" ]; then \
 	    (cd $(MOD); sh -c $(CMD)); \
 	else \
-	    for d in $$(find -maxdepth 1 -type d ! -name ".*"); do \
+	    for d in $$(find -maxdepth 1 -type d ! -name ".*" -a ! -name "cpython-*"); do \
 	        echo $$d; \
 	        (cd $$d; sh -c $(CMD)); \
 	    done \
