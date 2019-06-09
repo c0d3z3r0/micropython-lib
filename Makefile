@@ -7,7 +7,9 @@ CMD="find . -maxdepth 1 -mindepth 1 \( -name '*.py' -not -name 'test_*' -not -na
 install:
 	@mkdir -p $(PREFIX)
 	@if [ -n "$(MOD)" ]; then \
-	    (cd $(MOD); sh -c $(CMD)); \
+	    for m in $(MOD); do \
+	      (cd $$m; sh -c $(CMD)); \
+	    done \
 	else \
 	    for d in $$(find -maxdepth 1 -type d ! -name ".*" -a ! -name "cpython-*"); do \
 	        echo $$d; \
