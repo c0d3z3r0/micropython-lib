@@ -173,6 +173,7 @@ class FileHandler(Handler):
             self._f = open(self.filename, self.mode)
 
         self._f.write(self.formatter.format(record) + self.terminator)
+        self._f.flush()
 
     def close(self):
         if self._f is not None:
