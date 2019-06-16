@@ -4,7 +4,7 @@ See http://www.iana.org/time-zones/repository/tz-link.html for
 time zone and DST data sources.
 """
 
-import time as _time
+import utime as _time
 import math as _math
 
 def _cmp(x, y):
