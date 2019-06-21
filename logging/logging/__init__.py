@@ -1,6 +1,7 @@
 import utime
 import sys
 import uio
+import usocket
 
 CRITICAL = 50
 ERROR    = 40
@@ -190,6 +191,21 @@ class FileHandler(Handler):
     def close(self):
         if self._f is not None:
             self._f.close()
+
+class UDPHandler(Handler):
+    def __init__(self, addr, *args, port=4445, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._sock = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
+        self._addr = usocket.getaddrinfo(addr, port)[0][-1]
+        self.terminator = "\n"
+
+    def emit(self, record):
+        self._sock.sendto(self.formatter.format(record) + self.terminator,
+                          self._addr)
+
+    def close(self):
+        if self._sock is not None:
+            self._sock.close()
 
 
 class Formatter:
