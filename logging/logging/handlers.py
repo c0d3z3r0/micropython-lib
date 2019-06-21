@@ -22,8 +22,8 @@ class RotatingFileHandler(Handler):
     Compatible with CPythons `logging.handlers.RotatingFileHandler` class.
     """
 
-    def __init__(self, filename, maxBytes=0, backupCount=0):
-        super().__init__()
+    def __init__(self, filename, maxBytes=0, backupCount=0, **kwargs):
+        super().__init__(**kwargs)
         self.filename = filename
         self.maxBytes = maxBytes
         self.backupCount = backupCount

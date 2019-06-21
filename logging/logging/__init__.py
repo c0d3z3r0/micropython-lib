@@ -48,7 +48,7 @@ class Logger:
 
             if self.handlers:
                 for hdlr in self.handlers:
-                    hdlr.emit(record)
+                    hdlr.handle(record)
 
     def debug(self, msg, *args, module=None):
         self.log(DEBUG, msg, *args, module=module)
@@ -133,11 +133,23 @@ def basicConfig(level=INFO, filename=None, stream=None, format=None, style="%"):
 
 
 class Handler:
-    def __init__(self, formatter=None):
+    def __init__(self, formatter=None, level=NOTSET):
         self.formatter = formatter or Formatter()
+        self.level = level
 
     def setFormatter(self, fmt):
         self.formatter = fmt
+
+    def setLevel(self, level):
+        self.level = level
+
+    def handle(self, record):
+        if record.levelno >= (self.level or _level):
+            self.emit(record)
+
+    def emit(self, record):
+        raise NotImplementedError('emit must be implemented'
+                                  'by Handler subclasses')
 
 
 class StreamHandler(Handler):
