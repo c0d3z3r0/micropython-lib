@@ -8,6 +8,7 @@ ERROR    = 40
 WARNING  = 30
 INFO     = 20
 DEBUG    = 10
+LLDEBUG  = 5
 NOTSET   = 0
 
 _level_dict = {
@@ -16,6 +17,7 @@ _level_dict = {
     WARNING: "WARNING",
     INFO: "INFO",
     DEBUG: "DEBUG",
+    LLDEBUG: "LLDEBUG",
 }
 
 def addLevelName(level, name):
@@ -50,6 +52,9 @@ class Logger:
             if self.handlers:
                 for hdlr in self.handlers:
                     hdlr.handle(record)
+
+    def lldebug(self, msg, *args, module=None):
+        self.log(LLDEBUG, msg, *args, module=module)
 
     def debug(self, msg, *args, module=None):
         self.log(DEBUG, msg, *args, module=module)
